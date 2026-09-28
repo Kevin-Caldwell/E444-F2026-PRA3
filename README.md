@@ -1,1 +1,1 @@
-This repo is a clone ofhttps://github.com/miguelgrinberg/flasky
+This repo is a clone of https://github.com/miguelgrinberg/flasky by Kevin Caldwell for ECE444.
