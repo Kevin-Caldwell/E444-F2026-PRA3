@@ -4,6 +4,127 @@
 {% block title %}Flasky{% endblock %}
 
 {% block page_content %}
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+<style>
+    /* Global Background & Retro Scanlines */
+    html, body {
+        background-color: #050805 !important;
+        color: #33ff66 !important;
+        font-family: 'VT323', 'Courier New', monospace !important;
+        font-size: 22px !important;
+    }
+
+    /* CRT Monitor Scanline Overlay */
+    body::before {
+        content: " ";
+        display: block;
+        position: fixed;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%),
+                    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+        z-index: 9999;
+        background-size: 100% 3px, 6px 100%;
+        pointer-events: none;
+    }
+
+    /* Header Styling */
+    .page-header {
+        border-bottom: 2px dashed #33ff66 !important;
+        margin-top: 20px;
+        padding-bottom: 10px;
+    }
+
+    .page-header h1 {
+        color: #33ff66 !important;
+        font-family: 'VT323', 'Courier New', monospace !important;
+        font-size: 46px !important;
+        text-shadow: 0 0 10px rgba(51, 255, 102, 0.8) !important;
+        margin: 0;
+    }
+
+    /* Flask-WTF Form Container */
+    form {
+        background: #020a03 !important;
+        border: 3px solid #33ff66 !important;
+        box-shadow: 0 0 20px rgba(51, 255, 102, 0.35), inset 0 0 10px rgba(51, 255, 102, 0.1) !important;
+        padding: 30px !important;
+        border-radius: 4px !important;
+        margin-top: 25px !important;
+        max-width: 650px;
+    }
+
+    /* Labels */
+    form label {
+        color: #33ff66 !important;
+        font-family: 'VT323', 'Courier New', monospace !important;
+        font-size: 26px !important;
+        letter-spacing: 1px !important;
+        text-shadow: 0 0 5px rgba(51, 255, 102, 0.6) !important;
+        text-transform: uppercase !important;
+        margin-bottom: 6px !important;
+        display: block !important;
+    }
+
+    /* Inputs */
+    .form-control {
+        background-color: #000000 !important;
+        color: #33ff66 !important;
+        border: 2px solid #33ff66 !important;
+        font-family: 'VT323', 'Courier New', monospace !important;
+        font-size: 24px !important;
+        height: 48px !important;
+        padding: 6px 12px !important;
+        box-shadow: inset 0 0 8px rgba(51, 255, 102, 0.4) !important;
+        border-radius: 2px !important;
+    }
+
+    .form-control:focus {
+        outline: none !important;
+        border-color: #33ff66 !important;
+        box-shadow: 0 0 15px rgba(51, 255, 102, 0.9) !important;
+    }
+
+    /* Buttons */
+    .btn, .btn-default, .btn-primary {
+        background-color: #33ff66 !important;
+        color: #000000 !important;
+        border: 2px solid #33ff66 !important;
+        font-family: 'VT323', 'Courier New', monospace !important;
+        font-size: 24px !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+        box-shadow: 0 0 10px rgba(51, 255, 102, 0.6) !important;
+        padding: 8px 28px !important;
+        margin-top: 15px !important;
+        border-radius: 2px !important;
+        cursor: pointer;
+    }
+
+    .btn:hover, .btn-default:hover, .btn-primary:hover {
+        background-color: #000000 !important;
+        color: #33ff66 !important;
+        box-shadow: 0 0 18px rgba(51, 255, 102, 1) !important;
+    }
+
+    /* Error Validation States */
+    .help-block, .has-error .help-block {
+        color: #ff3333 !important;
+        font-family: 'VT323', monospace !important;
+        font-size: 20px !important;
+        text-shadow: 0 0 6px rgba(255, 51, 51, 0.8) !important;
+    }
+
+    .has-error .form-control {
+        border-color: #ff3333 !important;
+        box-shadow: inset 0 0 8px rgba(255, 51, 51, 0.5) !important;
+    }
+
+    .has-error label {
+        color: #ff3333 !important;
+    }
+</style>
+
 <div class="page-header">
   <h1>Hello, {% if name %}{{ name }} {% else %}Stranger{% endif %}!</h1>
 </div>

@@ -1,4 +1,14 @@
-from flask import Flask, render_template, session, redirect, url_for, flash
+import re
+from flask import (
+    Flask,
+    flash,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from flask_bootstrap import Bootstrap
 from datetime import datetime, timezone
 from flask_moment import Moment
@@ -38,7 +48,7 @@ def index():
         session['name'] = form.name.data
         session['email'] = form.email.data
 
-        return redirect(url_for('index'))
+        return redirect(url_for('chat_page'))
 
     return render_template('index.html', form=form, name=session.get('name'))
 
@@ -47,3 +57,54 @@ def user(name):
     return render_template('user.html',
                            name=name,
                            current_time=datetime.now(timezone.utc))
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json() or {}
+    message = data.get('message', '').strip()
+    msg_lower = message.lower()
+
+    if 'chat_memory' not in session:
+        session['chat_memory'] = {}
+
+    memory = session['chat_memory']
+
+    # 1. Detect user introducing their name (e.g., "My name is Alice")
+    name_match = re.search(r'my name is\s+([a-zA-Z]+)', message, re.IGNORECASE)
+
+    if name_match:
+        extracted_name = name_match.group(1).capitalize()
+        memory['user_name'] = extracted_name
+        session.modified = True
+        reply = f'Nice to meet you, {extracted_name}!'
+
+    elif 'what is my name' in msg_lower or 'what\'s my name' in msg_lower:
+        if 'user_name' in memory:
+            reply = f"I know you! Your name is {memory['user_name']}."
+        else:
+            reply = "I'm not sure. You can tell me by saying 'My name is [Name]'."
+
+    elif 'hello' in msg_lower or 'hi' in msg_lower:
+        reply = 'Hello!'
+
+    else:
+        reply = "Ask me what your name is."
+
+    return ({'reply': reply})
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Logged out and memory cleared.')
+    return redirect(url_for('index'))
+
+
+@app.route('/chat_page')
+def chat_page():
+    if not session.get('name') or not session.get('email'):
+        flash('Please submit your name and UofT email first.')
+        return redirect(url_for('index'))
+
+    return render_template(
+        'chat.html', name=session.get('name'), email=session.get('email')
+    )
